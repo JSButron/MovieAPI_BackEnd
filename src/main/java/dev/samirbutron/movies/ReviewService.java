@@ -16,8 +16,8 @@ public class ReviewService {
     private MongoTemplate mongoTemplate; //Otra forma de comunicarse con la DB y simplifica funciones dificiles de ejecutar
 
     public Review createReview(String reviewBody, String imdbId){
-        Review review = new Review(reviewBody);
-        reviewRepository.insert(review);
+        Review review = reviewRepository.insert(new Review(reviewBody));
+
         mongoTemplate.update(Movie.class) //Clase que queremos actualizar
                 .matching(Criteria.where("imdbId").is(imdbId)) //Encontramos los datos de la pelicula a actualizar
                 .apply(new Update().push("reviewIds").value(review)) //actualizamos dentro del campo de la pelicula
